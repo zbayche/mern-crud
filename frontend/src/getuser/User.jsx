@@ -9,7 +9,8 @@ const User = () => {
     useEffect(()=>{
         const fetchData = async () => {
             try {
-               const response = await axios.get("http://localhost:8000/api/users"); 
+            //    const response = await axios.get("http://localhost:8000/api/users"); 
+            const response = await axios.get("http://20.39.139.33:8000/api/users");
                setusers(response.data)
             } catch (error) {
                 console.log("Error while fetching data", error);
