@@ -19,7 +19,8 @@ const AjouterUser = () => {
     }
     const submitForm = async (e) => {
         e.preventDefault();
-        await axios.post("http://localhost:8000/api/user",user)
+        // await axios.post("http://localhost:8000/api/user",user)
+        await axios.post("http://20.39.139.33:8000/api/user",user)
         .then((response)=>{
             toast.success(response.data.message, {position: "top-right"});
             navigate("/");
