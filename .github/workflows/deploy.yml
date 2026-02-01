@@ -1,0 +1,51 @@
+name: Deploy MERN App
+
+on:
+  push:
+    branches:
+      - main  # Déclenchement quand tu pousses sur main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  # ou la version que tu utilises
+
+      - name: Install dependencies (backend)
+        working-directory: ./BACKEND
+        run: npm install
+
+      - name: Install dependencies (frontend)
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: Copy files to VM
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.VM_HOST }}  # mettre l'IP de ta VM dans un secret
+          username: ${{ secrets.VM_USER }}  # ton utilisateur Azure (ex: azurelarbi)
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "."
+          target: "/home/azurelarbi/mern-crud"
+
+      - name: Deploy on VM
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/mern-crud
+            docker-compose down
+            docker-compose up -d --build
