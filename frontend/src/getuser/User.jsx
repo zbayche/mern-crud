@@ -3,14 +3,14 @@ import "./User.css";
 import axios from "axios";
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import API_URL from '../api';
 
 const User = () => {
     const [users,setusers] = useState([]);
     useEffect(()=>{
         const fetchData = async () => {
             try {
-            //    const response = await axios.get("http://localhost:8000/api/users"); 
-            const response = await axios.get("http://20.39.139.33:8000/api/users");
+            const response = await axios.get(`${API_URL}/users`);
                setusers(response.data)
             } catch (error) {
                 console.log("Error while fetching data", error);
@@ -20,8 +20,7 @@ const User = () => {
     },[])
 
     const deleteUser = async (userId) => {
-        // await axios.delete(`http://localhost:8000/api/delete/user/${userId}`)
-        await axios.delete(`http://20.39.139.33:8000/api/delete/user/${userId}`)
+        await axios.delete(`${API_URL}/delete/user/${userId}`)
         .then((response)=>{
             setusers((prevUser)=>prevUser.filter((user)=>user._id !== userId))
             toast.success(response.data.message,{position:"top-right"})
@@ -34,8 +33,8 @@ const User = () => {
 
   return (
     <div className='userTable'>
-        <Link to="/add" type="button" class="btn btn-primary">
-            Add User <i class="fa-solid fa-user-plus"></i>
+        <Link to="/add" type="button" className="btn btn-primary">
+            Add User <i className="fa fa-user-plus"></i>
         </Link>
         {users.length === 0?(
           <div className='noData'>
@@ -57,17 +56,17 @@ const User = () => {
                 <tbody>
                     {users.map((user,index)=>{
                         return(
-                            <tr>
+                            <tr key={user._id}>
                                 <td>{index+1}</td>
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
                                 <td>{user.address}</td>
                                 <td className='actionButtons'>
-                                    <Link to={`/update/`+user._id} type="button" class="btn btn-info">
-                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    <Link to={`/update/`+user._id} type="button" className="btn btn-info">
+                                    <i className="fa fa-pencil-square-o"></i>
                                     </Link>
-                                    <button onClick={()=>deleteUser(user._id)} type="button" class="btn btn-danger">
-                                        <i class="fa-solid fa-trash"></i>
+                                    <button onClick={()=>deleteUser(user._id)} type="button" className="btn btn-danger">
+                                        <i className="fa fa-trash"></i>
                                     </button>
                                     
                                 </td>

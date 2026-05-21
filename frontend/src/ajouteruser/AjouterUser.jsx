@@ -3,6 +3,7 @@ import './ajouterUser.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import API_URL from '../api';
 
 const AjouterUser = () => {
     const users =  {
@@ -19,8 +20,7 @@ const AjouterUser = () => {
     }
     const submitForm = async (e) => {
         e.preventDefault();
-        // await axios.post("http://localhost:8000/api/user",user)
-        await axios.post("http://20.39.139.33:8000/api/user",user)
+        await axios.post(`${API_URL}/user`,user)
         .then((response)=>{
             toast.success(response.data.message, {position: "top-right"});
             navigate("/");
@@ -31,8 +31,8 @@ const AjouterUser = () => {
     }
   return (
     <div className='addUser'>
-        <Link to='/' type='button' class='btn btn-secondary'>
-            <i class="fa-solid fa-backward"></i> Back
+        <Link to='/' type='button' className='btn btn-secondary'>
+            <i className="fa fa-backward"></i> Back
         </Link>
       <h3>Add New User</h3>
       <form className='addUserForm' onSubmit={submitForm}>
@@ -51,7 +51,7 @@ const AjouterUser = () => {
             <input type="text" id='address' name='address' onChange={inputHandler} autoComplete='off' placeholder='Enter your Address'/>
         </div>
         <div className="inputGroup">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" className="btn btn-primary">Submit</button>
         </div>
       </form>
     </div>

@@ -3,6 +3,7 @@ import './update.css';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import API_URL from '../api';
 
 const Update = () => {
     const users =  {
@@ -21,7 +22,7 @@ const Update = () => {
     }
 
     useEffect(()=>{
-        axios.get(`http://20.39.139.33:8000/api/user/${id}`)
+        axios.get(`${API_URL}/user/${id}`)
         .then((response)=>{
             setUser(response.data);
         })
@@ -32,8 +33,7 @@ const Update = () => {
 
     const submitForm = async (e) => {
         e.preventDefault();
-        // await axios.put(`http://localhost:8000/api/update/user/${id}`,user)
-        await axios.put(`http://20.39.139.33:8000/api/update/user/${id}`,user)
+        await axios.put(`${API_URL}/update/user/${id}`,user)
         .then((response)=>{
             toast.success(response.data.message, {position: "top-right"});
             navigate("/");
@@ -44,8 +44,8 @@ const Update = () => {
     }
   return (
     <div className='addUser'>
-        <Link to='/' type='button' class='btn btn-secondary'>
-            <i class="fa-solid fa-backward"></i> Back
+        <Link to='/' type='button' className='btn btn-secondary'>
+            <i className="fa fa-backward"></i> Back
         </Link>
       <h3>Update User</h3>
       <form className='addUserForm' onSubmit={submitForm}>
@@ -64,7 +64,7 @@ const Update = () => {
             <input type="text" id='address' value={user.address} name='address' onChange={inputHandler} autoComplete='off' placeholder='Enter your Address'/>
         </div>
         <div className="inputGroup">
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="submit" className="btn btn-primary">Update</button>
         </div>
       </form>
     </div>
